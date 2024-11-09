@@ -17,7 +17,7 @@ namespace Proyecto
         {
             InitializeComponent();
 
-            _apiService = new ApiService("https://b6e0-181-78-20-113.ngrok-free.app");
+            _apiService = new ApiService("https://da3e-191-156-250-1.ngrok-free.app");
         }
 
         private async void Insertar(object sender, EventArgs e)

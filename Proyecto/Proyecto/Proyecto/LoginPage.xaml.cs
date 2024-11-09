@@ -7,6 +7,7 @@ using Microsoft.Maui.Controls;
 using Proyecto.Helpers;
 using Proyecto.Model;
 
+
 namespace Proyecto
 {
     public partial class LoginPage : ContentPage
@@ -17,7 +18,7 @@ namespace Proyecto
         {
             InitializeComponent();
 
-            _apiService = new ApiService("https://b6e0-181-78-20-113.ngrok-free.app");
+            _apiService = new ApiService("https://da3e-191-156-250-1.ngrok-free.app");
         }
 
         private async void Login(object sender, EventArgs e)
@@ -33,9 +34,9 @@ namespace Proyecto
 
                 if (usuarioEncontrado != null)
                 {
-                    // Navegar a la página de destino si el login es correcto
+                    // Mostrar la alerta y esperar a que se cierre antes de navegar
                     await DisplayAlert("Login", "Inicio de sesión exitoso", "OK");
-                    await Navigation.PushAsync(new Cliente()); // Reemplaza `PaginaDestino` con la página a la que quieras redirigir
+                    Application.Current.MainPage = new Inicio(); // Reemplaza `PaginaDestino` con la página de destino
                 }
                 else
                 {
@@ -49,6 +50,7 @@ namespace Proyecto
                 await DisplayAlert("Error", "Hubo un problema al iniciar sesión. Intenta de nuevo más tarde.", "Cerrar");
             }
         }
+
 
         private async void Registrar(object sender, EventArgs e)
         {

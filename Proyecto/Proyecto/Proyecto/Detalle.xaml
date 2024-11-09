@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Proyecto.Detalle"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Detalle">
+    <ScrollView>
+        <VerticalStackLayout>
+
+
+            <Grid Padding="20">
+
+                <!--  Imagen de fondo  -->
+                <Image
+                    Grid.RowSpan="2"
+                    Aspect="AspectFill"
+                    HeightRequest="200"
+                    HorizontalOptions="FillAndExpand"
+                    Opacity="0.3"
+                    Source="banner.jpg"
+                    VerticalOptions="FillAndExpand"
+                    WidthRequest="450" />
+
+                <!--  Barra de búsqueda encima de la imagen  -->
+                <Grid Padding="10" BackgroundColor="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="50" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--  Frame para aplicar el radius a la barra de búsqueda  -->
+                    <Frame
+                        Grid.Column="0"
+                        Padding="0"
+                        BackgroundColor="White"
+                        CornerRadius="20"
+                        HasShadow="False"
+                        VerticalOptions="Center">
+
+                        <!--  Barra de búsqueda  -->
+                        <SearchBar
+                            BackgroundColor="Transparent"
+                            HeightRequest="40"
+                            HorizontalOptions="FillAndExpand"
+                            Placeholder="Buscar"
+                            TextColor="Black" />
+
+                    </Frame>
+                    <Frame
+                        x:Name="CarritoFrame"
+                        Grid.Column="1"
+                        Padding="5"
+                        BackgroundColor="White"
+                        BorderColor="Gray"
+                        CornerRadius="25"
+                        HasShadow="True"
+                        HeightRequest="50"
+                        WidthRequest="50">
+
+
+                        <Image
+                            HeightRequest="30"
+                            Source="carrito.png"
+                            WidthRequest="30">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCartTapped" />
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                    </Frame>
+                </Grid>
+
+            </Grid>
+
+            <!--  Servicios  -->
+
+            <Grid ColumnDefinitions="auto,auto">
+
+                <Label
+                    Grid.Column="0"
+                    Margin="20,4"
+                    FontAttributes="Bold"
+                    FontSize="30"
+                    Text="Servicios" />
+
+                <Label
+                    Grid.Column="1"
+                    Margin="100,17,0,0"
+                    FontAttributes="Bold"
+                    FontSize="13"
+                    Text="Ver todo"
+                    TextColor="Blue">
+                    <!--  Añadí el color de texto para que parezca un enlace  -->
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="VerMaServicios" />
+                    </Label.GestureRecognizers>
+                </Label>
+
+            </Grid>
+            <CollectionView
+                x:Name="ColleccionServicio"
+                Margin="10"
+                ItemsLayout="HorizontalList"
+                ItemsSource="{Binding servicio}"
+                SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            Margin="5"
+                            Padding="10"
+                            CornerRadius="10"
+                            HasShadow="True"
+                            HeightRequest="250"
+                            WidthRequest="170">
+                            <VerticalStackLayout>
+
+                                <!--  Imagen del servicio  -->
+                                <Image
+                                    Margin="0,0,0,5"
+                                    Aspect="AspectFill"
+                                    HeightRequest="150"
+                                    Source="{Binding Imagen}" />
+
+                                <!--  Nombre del servicio  -->
+                                <Label
+                                    Margin="0,0,0,5"
+                                    FontAttributes="Bold"
+                                    FontSize="16"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding Nombre}"
+                                    TextColor="Black" />
+
+                                <!--  Calificación  -->
+                                <Label
+                                    FontSize="24"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding Calificacion}"
+                                    TextColor="Gold" />
+
+                            </VerticalStackLayout>
+
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="IrServicio" />
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Grid ColumnDefinitions="auto,auto">
+
+                <Label
+                    Grid.Column="0"
+                    Margin="20,4"
+                    FontAttributes="Bold"
+                    FontSize="30"
+                    Text="Productos" />
+
+                <Label
+                    Grid.Column="1"
+                    Margin="100,17,0,0"
+                    FontAttributes="Bold"
+                    FontSize="13"
+                    Text="Ver todo"
+                    TextColor="Blue">
+
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="VerMasProductos" />
+                    </Label.GestureRecognizers>
+                </Label>
+
+
+            </Grid>
+
+            <!--  Aqui va la coleccion de productos  -->
+            <CollectionView
+                x:Name="ProductosInicio"
+                Margin="10"
+                ItemsLayout="VerticalGrid, 2">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            Margin="5"
+                            Padding="10"
+                            CornerRadius="10"
+                            HasShadow="True"
+                            HeightRequest="250"
+                            WidthRequest="160">
+                            <VerticalStackLayout>
+
+                                <!--  Imagen del producto  -->
+                                <Image
+                                    Margin="0,0,0,5"
+                                    Aspect="AspectFill"
+                                    HeightRequest="150"
+                                    Source="{Binding Imagen}" />
+
+                                <!--  Nombre del producto  -->
+                                <Label
+                                    Margin="0,0,0,5"
+                                    FontAttributes="Bold"
+                                    FontSize="16"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding Nombre}"
+                                    TextColor="Black" />
+
+                                <!--  Calificación  -->
+                                <Label
+                                    FontSize="14"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding Calificacion, StringFormat='Calificación: {0:F1}'}"
+                                    TextColor="Gray" />
+
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+
+            <!--  Promocion  -->
+            <Grid ColumnDefinitions="auto,auto">
+
+                <Label
+                    Grid.Column="0"
+                    Margin="20,4"
+                    FontAttributes="Bold"
+                    FontSize="30"
+                    Text="Promociones" />
+
+                <Label
+                    Grid.Column="1"
+                    Margin="60,17,0,0"
+                    FontAttributes="Bold"
+                    FontSize="13"
+                    Text="Ver todo"
+                    TextColor="Blue">
+
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="VerMasProductos" />
+                    </Label.GestureRecognizers>
+                </Label>
+
+
+            </Grid>
+
+            <CollectionView
+                x:Name="ColleccionPromocion"
+                Margin="10"
+                ItemsLayout="HorizontalList">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            Margin="5"
+                            Padding="10"
+                            CornerRadius="10"
+                            HasShadow="True"
+                            HeightRequest="250"
+                            WidthRequest="160">
+                            <VerticalStackLayout>
+
+                                <!--  Imagen del producto  -->
+                                <Image
+                                    Margin="0,0,0,5"
+                                    Aspect="AspectFill"
+                                    HeightRequest="150"
+                                    Source="{Binding Imagen}" />
+
+                                <!--  Nombre del producto  -->
+                                <Label
+                                    Margin="0,0,0,5"
+                                    FontAttributes="Bold"
+                                    FontSize="16"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding Nombre}"
+                                    TextColor="Black" />
+
+                                <!--  Calificación  -->
+                                <Label
+                                    FontSize="14"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding Calificacion, StringFormat='Calificación: {0:F1}'}"
+                                    TextColor="Gray" />
+
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+
+
+
+
+
+
+
+
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
