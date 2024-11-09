@@ -4,62 +4,59 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
+using Proyecto.Helpers;
+using Proyecto.Model;
 
 namespace Proyecto
 {
     public partial class LoginPage : ContentPage
     {
-        private readonly HttpClient _httpClient = new HttpClient();
 
+        private ApiService _apiService;
         public LoginPage()
         {
             InitializeComponent();
+
+            _apiService = new ApiService("https://b6e0-181-78-20-113.ngrok-free.app");
         }
 
-        private async void OnLoginButtonClicked(object sender, EventArgs e)
+        private async void Login(object sender, EventArgs e)
         {
-            var loginData = new
-            {
-                Username = UsernameEntry.Text,
-                Password = PasswordEntry.Text
-            };
-
-            var json = JsonSerializer.Serialize(loginData);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
             try
             {
-                var response = await _httpClient.PostAsync("https://b137-190-0-245-162.ngrok-free.app/api/Usuarios", content);
+                // Obtener la lista de usuarios desde la API
+                List<Usuarios> usuarios = await _apiService.GetAsync<List<Usuarios>>("api/Usuarios");
 
-                if (response.IsSuccessStatusCode)
+                // Validar el correo y la contraseña ingresados
+                var usuarioEncontrado = usuarios.FirstOrDefault(u =>
+                    u.correo == CorreoEntry.Text && u.contrasena == PasswordEntry.Text);
+
+                if (usuarioEncontrado != null)
                 {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    var result = JsonSerializer.Deserialize<LoginResponse>(responseContent);
-                    await DisplayAlert("Éxito", $"Bienvenido, {result?.Username}", "OK");
-                    // Navegar a la página principal o dashboard
+                    // Navegar a la página de destino si el login es correcto
+                    await DisplayAlert("Login", "Inicio de sesión exitoso", "OK");
+                    await Navigation.PushAsync(new Cliente()); // Reemplaza `PaginaDestino` con la página a la que quieras redirigir
                 }
                 else
                 {
-                    var errorMessage = await response.Content.ReadAsStringAsync();
-                    await DisplayAlert("Error", $"Fallo en el inicio de sesión: {errorMessage}", "OK");
+                    // Mostrar un mensaje de error si no se encuentra el usuario
+                    await DisplayAlert("Error", "Correo o contraseña incorrectos", "Cerrar");
                 }
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", $"Ocurrió un problema: {ex.Message}", "OK");
+                Console.WriteLine("Error en el login: " + ex.Message);
+                await DisplayAlert("Error", "Hubo un problema al iniciar sesión. Intenta de nuevo más tarde.", "Cerrar");
             }
         }
 
-        private async void OnRegisterTapped(object sender, EventArgs e)
+        private async void Registrar(object sender, EventArgs e)
         {
-            // Navegar a la página de registro
+            // Redirigir a la página de inicio de sesión
             await Navigation.PushAsync(new RegisterPage());
         }
+
+
     }
 
-    public class LoginResponse
-    {
-        public string Username { get; set; }
-        public string Token { get; set; }
-    }
 }
