@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Proyecto.Model;
+
 
 namespace Proyecto.Helpers
 {
@@ -44,26 +46,37 @@ namespace Proyecto.Helpers
             var jsonData = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-
             var response = await _httpClient.PostAsync(url, content);
 
             if (response.IsSuccessStatusCode)
             {
                 var responseData = await response.Content.ReadAsStringAsync();
-                 // Para depurar la respuesta
+                Console.WriteLine("Respuesta del servidor: " + responseData);
 
                 if (string.IsNullOrWhiteSpace(responseData))
                 {
                     return default(TResponse); // Maneja respuestas vacías
                 }
 
-                return JsonConvert.DeserializeObject<TResponse>(responseData);
+                try
+                {
+                    return JsonConvert.DeserializeObject<TResponse>(responseData);
+                }
+                catch (JsonReaderException ex)
+                {
+                    Console.WriteLine("Error de deserialización: " + ex.Message);
+                    throw new Exception("Error al deserializar la respuesta JSON", ex);
+                }
             }
             else
             {
-                throw new Exception($"Error al enviar datos: {response.ReasonPhrase}");
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Error en la respuesta de la API: " + errorContent);
+                throw new Exception($"Error al enviar datos: {response.ReasonPhrase}. Detalles: {errorContent}");
             }
         }
+
+
 
         // Método PUT
         public async Task<TResponse> PutAsync<TRequest, TResponse>(string endpoint, TRequest data)

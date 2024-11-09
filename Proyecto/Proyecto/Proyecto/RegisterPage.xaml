@@ -33,7 +33,7 @@
             IsPassword="True"
             Placeholder="Contraseña" />
 
-        <Entry x:Name="TelefonoEntry" Placeholder="Telefono" Keyboard="Numeric" />
+        <Entry x:Name="TelefonoEntry" Placeholder="Telefono"  />
 
 
         <!--  Botón de registro  -->

@@ -17,45 +17,38 @@ namespace Proyecto
         {
             InitializeComponent();
 
-            _apiService = new ApiService("https://9fcd-181-78-20-113.ngrok-free.app");
+            _apiService = new ApiService("https://b6e0-181-78-20-113.ngrok-free.app");
         }
 
         private async void Insertar(object sender, EventArgs e)
         {
             Usuarios usuario = LlenarPersona();
 
+            // Llama al método PostAsync y espera un objeto Usuarios como respuesta.
+            Usuarios result = await _apiService.PostAsync<Usuarios, Usuarios>("api/Usuarios", usuario);
 
-            int result = await _apiService.PostAsync<Usuarios,int>("api/Usuarios", usuario);
-
-            if (result > 0)
+            if (result != null && result.idUsuario > 0)
             {
-                await DisplayAlert("Insert", "Exitoo", "Ok");
+                await DisplayAlert("Insert", "¡Registro exitoso!", "Ok");
             }
-
-       
+            else
+            {
+                await DisplayAlert("Error", "Hubo un problema al insertar el usuario.", "Ok");
+            }
         }
+
 
         private Usuarios LlenarPersona(bool isUpdate = false)
         {
             Usuarios usuario = new Usuarios();
 
 
-            usuario.Nombre = NombreEntry.Text;
-            usuario.Apellido = ApellidosEntry.Text;
-            usuario.Correo = CorreoEntry.Text;
-            usuario.Contraseña = PasswordEntry.Text;
-
-            // Convertir el texto a un entero
-            if (int.TryParse(TelefonoEntry.Text, out int telefono))
-            {
-                usuario.Telefono = telefono;
-            }
-            else
-            {
-                // Manejo de error en caso de que la conversión falle
-                // Puedes lanzar una excepción o mostrar un mensaje de error
-                throw new FormatException("El número de teléfono debe ser un valor numérico válido.");
-            }
+            usuario.nombre = NombreEntry.Text;
+            usuario.apellidos = ApellidosEntry.Text;
+            usuario.correo = CorreoEntry.Text;
+            usuario.contrasena = PasswordEntry.Text;
+            usuario.telefono = TelefonoEntry.Text;
+          
 
 
             return usuario;

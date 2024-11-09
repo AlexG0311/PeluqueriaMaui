@@ -12,22 +12,35 @@ namespace Proyecto.Model
 {
     public class Usuarios
     {
-        
-      
+
+        [JsonProperty("idusuario")]
+        public int idUsuario { get; set; }
 
         [JsonProperty("nombre")]
-        public string Nombre { get; set; }
+        [Required]
+        [StringLength(45)]
+        public string nombre { get; set; }
 
         [JsonProperty("apellidos")]
-        public string Apellido { get; set; }
+        [Required]
+        [StringLength(45)]
+        public string apellidos { get; set; }
 
         [JsonProperty("correo")]
-        public string Correo { get; set; }
+        [Required]
+        [StringLength(45)]
+        [EmailAddress]
+        public string correo { get; set; }
 
-        [JsonProperty("contraseña")]
-        public string Contraseña { get; set; }
+        [JsonProperty("contrasena")]
+        [Required]
+        [StringLength(45)]
+        public string contrasena { get; set; }
 
         [JsonProperty("telefono")]
-        public int Telefono { get; set; }
+        [Required]
+        [StringLength(15)]
+        public string telefono { get; set; }
+
     }
 }
